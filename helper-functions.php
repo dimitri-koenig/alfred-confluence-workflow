@@ -1,0 +1,30 @@
+<?php
+
+function getCredentialsFromLocalKeychain()
+{
+	$keychainData = shell_exec('security find-internet-password -j "' . $_ENV['alfred_workflow_bundleid'] . '" -g 2>&1; echo $?');
+
+	$protocol = findValue('/"ptcl".*"([^"]+)"\W*/Uis', $keychainData);
+	$server = findValue('/"srvr".*"([^"]+)"\W*/Uis', $keychainData);
+
+	$config = [
+		'hostUrl'  => ($protocol === 'htps' ? 'https://' : 'http://') . $server,
+		'username' => findValue('/"acct".*"([^"]+)"\W*/Uis', $keychainData),
+		'password' => findValue('/password:\W*"([^"]+)"/', $keychainData)
+	];
+
+	return $config;
+}
+
+function findValue($pattern, $haystack)
+{
+	$matches = [];
+	preg_match($pattern, $haystack, $matches);
+
+	return count($matches) ? trim(array_pop($matches)) : null;
+}
+
+function removeHighlight($input)
+{
+	return preg_replace('/@@@[^@]+@@@(.*)@@@[^@]+@@@/Uis', '$1', $input);
+}
