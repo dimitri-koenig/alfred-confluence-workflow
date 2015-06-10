@@ -1,8 +1,13 @@
 <?php
 
+function getBundleId()
+{
+	return isset($_ENV['alfred_workflow_bundleid']) ? $_ENV['alfred_workflow_bundleid'] : $_SERVER['alfred_workflow_bundleid'];
+}
+
 function getCredentialsFromLocalKeychain()
 {
-	$keychainData = shell_exec('security find-internet-password -j "' . $_ENV['alfred_workflow_bundleid'] . '" -g 2>&1; echo $?');
+	$keychainData = shell_exec('security find-internet-password -j "' . getBundleId() . '" -g 2>&1; echo $?');
 
 	$protocol = findValue('/"ptcl".*"([^"]+)"\W*/Uis', $keychainData);
 	$server = findValue('/"srvr".*"([^"]+)"\W*/Uis', $keychainData);

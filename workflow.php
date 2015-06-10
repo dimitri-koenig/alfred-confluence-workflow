@@ -21,7 +21,7 @@ try
 	$response = $wf->request($config['hostUrl'] . '/rest/searchv3/latest/search?queryString=' . urlencode($input), $options);
 	$jsonResponse = json_decode($response);
 
-	if ($jsonResponse->errorMessages)
+	if (isset($jsonResponse->errorMessages))
 	{
 		foreach ($jsonResponse->errorMessages as $errorMessage)
 		{
