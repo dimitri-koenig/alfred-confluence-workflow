@@ -1,6 +1,6 @@
 # Confluence Search Suggest Workflow for Alfred 2
 
-Uses Confluence's REST Api for searching
+Uses Confluence's REST Api for searching and fastjumping to recently viewed pages
 
 ## Installation
 
@@ -11,3 +11,7 @@ Uses Confluence's REST Api for searching
 3. Add "com.alfredapp.dimitrikoenig.confluencesuggest" to the comment field
 
 4. Ready
+
+## Usage
+
+Either type in `con {search word}` or simply `conr` for recently viewed pages
