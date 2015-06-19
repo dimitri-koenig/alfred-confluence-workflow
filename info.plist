@@ -19,6 +19,17 @@
 				<string></string>
 			</dict>
 		</array>
+		<key>6442DAE2-AE27-4D45-A235-A8D908F061E8</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>1C288A2C-2CF4-419A-A031-6F0B5A3E3147</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 	</dict>
 	<key>createdby</key>
 	<string>Dimitri König</string>
@@ -67,7 +78,8 @@
 				<key>runningsubtext</key>
 				<string>Retrieving search suggestions ...</string>
 				<key>script</key>
-				<string>$input = '{query}';
+				<string>$mode = 'search';
+$input = '{query}';
 
 require_once('workflow.php');</string>
 				<key>subtext</key>
@@ -86,15 +98,80 @@ require_once('workflow.php');</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>plusspaces</key>
+				<false/>
+				<key>url</key>
+				<string>{query}</string>
+				<key>utf8</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>1C288A2C-2CF4-419A-A031-6F0B5A3E3147</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>100</integer>
+				<key>keyword</key>
+				<string>conr</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Loading...</string>
+				<key>script</key>
+				<string>$mode = 'recently-viewed';
+$input = '{query}';
+
+require_once('workflow.php');</string>
+				<key>title</key>
+				<string>Recently viewed Confluence Pages</string>
+				<key>type</key>
+				<integer>1</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>6442DAE2-AE27-4D45-A235-A8D908F061E8</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string></string>
 	<key>uidata</key>
 	<dict>
+		<key>1C288A2C-2CF4-419A-A031-6F0B5A3E3147</key>
+		<dict>
+			<key>ypos</key>
+			<real>130</real>
+		</dict>
 		<key>63F60794-BB56-4415-9372-BAF974C3A7E1</key>
 		<dict>
 			<key>ypos</key>
 			<real>60</real>
+		</dict>
+		<key>6442DAE2-AE27-4D45-A235-A8D908F061E8</key>
+		<dict>
+			<key>ypos</key>
+			<real>180</real>
 		</dict>
 		<key>CE7D656A-EF57-43A4-8E6D-BDD8DB15D5C4</key>
 		<dict>

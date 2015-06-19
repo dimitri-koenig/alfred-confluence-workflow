@@ -22,22 +22,40 @@ $options = array(
 );
 
 try {
-    $response = $wf->request($config['hostUrl'] . '/rest/searchv3/latest/search?queryString=' . urlencode($input), $options);
-    $jsonResponse = json_decode($response);
+    if ($mode === 'search') {
+        $response = $wf->request($config['hostUrl'] . '/rest/searchv3/latest/search?queryString=' . urlencode($input), $options);
+        $jsonResponse = json_decode($response);
 
-    if (isset($jsonResponse->errorMessages)) {
-        foreach ($jsonResponse->errorMessages as $errorMessage) {
-            $wf->result('confluence-response-error', $input, 'Error message', $errorMessage, 'icon.png');
+        if (isset($jsonResponse->errorMessages)) {
+            foreach ($jsonResponse->errorMessages as $errorMessage) {
+                $wf->result('confluence-response-error', $input, 'Error message', $errorMessage, 'icon.png');
+            }
+        }
+
+        if ($jsonResponse->total === 0) {
+            $wf->result('confluence-no-results', $input, 'No Suggestions', 'No search suggestions for "' . $input . '" found', 'icon.png');
+        }
+
+        if ($jsonResponse->total > 0) {
+            foreach ($jsonResponse->results as $result) {
+                $wf->result('confluence-' . $result->id, $config['hostUrl'] . $result->url, removeHighlight($result->title), $result->friendlyDate . ' | ' . removeHighlight($result->bodyTextHighlights), '');
+            }
         }
     }
+    if ($mode === 'recently-viewed') {
+        $response = $wf->request($config['hostUrl'] . '/rest/recentlyviewed/latest/recent', $options);
+        $jsonResponse = json_decode($response);
 
-    if ($jsonResponse->total === 0) {
-        $wf->result('confluence-no-results', $input, 'No Suggestions', 'No search suggestions for "' . $input . '" found', 'icon.png');
-    }
+        if (isset($jsonResponse->errorMessages)) {
+            foreach ($jsonResponse->errorMessages as $errorMessage) {
+                $wf->result('confluence-response-error', $input, 'Error message', $errorMessage, 'icon.png');
+            }
+        }
 
-    if ($jsonResponse->total > 0) {
-        foreach ($jsonResponse->results as $result) {
-            $wf->result('confluence-' . $result->id, $config['hostUrl'] . $result->url, removeHighlight($result->title), $result->friendlyDate . ' | ' . removeHighlight($result->bodyTextHighlights), '');
+        if (is_array($jsonResponse)) {
+            foreach ($jsonResponse as $result) {
+                $wf->result(sprintf('confluence-%s-%s', $result->id, $result->lastSeen), $config['hostUrl'] . $result->url, $result->title, sprintf('%s - Space: %s', date('H:i d.m.', intval($result->lastSeen/1000)), $result->space), '');
+            }
         }
     }
 } catch (Exception $e) {
