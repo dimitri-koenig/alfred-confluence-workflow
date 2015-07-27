@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('UTC');
+
 require_once('workflows-library.php');
 require_once('helper-functions.php');
 
@@ -38,7 +40,7 @@ try {
 
         if ($jsonResponse->total > 0) {
             foreach ($jsonResponse->results as $result) {
-                $wf->result('confluence-' . $result->id, $config['hostUrl'] . $result->url, removeHighlight($result->title), $result->friendlyDate . ' | ' . removeHighlight($result->bodyTextHighlights), '');
+                $wf->result('confluence-' . $result->id, $config['hostUrl'] . $result->url, removeHighlight($result->title), sprintf('%s | %s | %s', $result->searchResultContainer->name, $result->friendlyDate, removeHighlight($result->bodyTextHighlights)), '');
             }
         }
     }
