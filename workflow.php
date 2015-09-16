@@ -25,7 +25,7 @@ $options = array(
 
 try {
     if ($mode === 'search') {
-        $response = $wf->request($config['hostUrl'] . '/rest/searchv3/latest/search?queryString=' . urlencode($input), $options);
+        $response = $wf->request($config['hostUrl'] . '/rest/searchv3/latest/search?queryString=' . rawurlencode(utf8_encode($input)), $options);
         $jsonResponse = json_decode($response);
 
         if (isset($jsonResponse->errorMessages)) {
