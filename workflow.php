@@ -1,5 +1,8 @@
 <?php
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 date_default_timezone_set('UTC');
 
 require_once('workflows-library.php');
@@ -16,17 +19,25 @@ if ($config['useLocalKeychain']) {
 if (empty($config['username']) || empty($config['password'])) {
     $wf->result('confluence-auth-error', '', 'Auth config incomplete', '', 'icon.png');
     echo $wf->toxml();
-    die();
+    die('');
 }
 
 $options = array(
     CURLOPT_USERPWD => $config['username'] . ':' . $config['password']
 );
 
+if (!isset($mode)) {
+    $mode = 'search';
+}
+
 try {
     if ($mode === 'search') {
         $response = $wf->request($config['hostUrl'] . '/rest/searchv3/latest/search?queryString=' . rawurlencode(utf8_encode($input)), $options);
         $jsonResponse = json_decode($response);
+
+        if (!is_object($jsonResponse)) {
+            throw new Exception($response);
+        }
 
         if (isset($jsonResponse->errorMessages)) {
             foreach ($jsonResponse->errorMessages as $errorMessage) {
@@ -61,7 +72,7 @@ try {
         }
     }
 } catch (Exception $e) {
-    $wf->result('confluence-request-error', $input, 'Search Request Error', 'Error when searching for "' . $searchWords, 'icon.png');
+    $wf->result('confluence-request-error', $input, 'Search Request Error', strip_tags($e->getMessage()), 'icon.png');
 }
 
 echo $wf->toxml();
