@@ -51,7 +51,7 @@ try {
 
         if ($jsonResponse->total > 0) {
             foreach ($jsonResponse->results as $result) {
-                $wf->result('confluence-' . $result->id, $config['hostUrl'] . $result->url, removeHighlight($result->title), sprintf('%s | %s | %s', $result->searchResultContainer->name, $result->friendlyDate, removeHighlight($result->bodyTextHighlights)), '');
+                $wf->result('confluence-' . $result->id, $config['hostUrl'] . $result->url, removeHighlight($result->title), sprintf('%s | %s | %s', isset($result->searchResultContainer) ? $result->searchResultContainer->name : 'N/A', $result->friendlyDate, removeHighlight($result->bodyTextHighlights)), '');
             }
         }
     }
