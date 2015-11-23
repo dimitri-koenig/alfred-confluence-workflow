@@ -11,9 +11,11 @@ function getCredentialsFromLocalKeychain()
 
     $protocol = findValue('/"ptcl".*"([^"]+)"\W*/Uis', $keychainData);
     $server = findValue('/"srvr".*"([^"]+)"\W*/Uis', $keychainData);
-
+    $port = findValue('/"port".*(0[xX][0-9afA-F]{8})\W*/Uis', $keychainData);
+    $port = (empty(hexdec($port)) ? '' : ':'.hexdec($port));
+    
     $config = array(
-        'hostUrl'  => ($protocol === 'htps' ? 'https://' : 'http://') . $server,
+        'hostUrl'  => ($protocol === 'htps' ? 'https://' : 'http://') . $server . $port,
         'username' => findValue('/"acct".*"([^"]+)"\W*/Uis', $keychainData),
         'password' => findValue('/password:\W*"([^"]+)"/', $keychainData)
     );
