@@ -8,9 +8,11 @@ Uses Confluence's REST Api for searching and fastjumping to recently viewed page
 
 2. Go into your mac keychain program, and either search for your confluence safari login data, or create such an item ([Click here for a short tutorial on that](https://www.dimitrikoenig.net/better-usage-of-sensible-user-data-for-alfred-workflows.html))
 
-3. Add "com.alfredapp.dimitrikoenig.confluencesuggest" to the comment field
+3. Make sure the "Where" fields points to the confluence installation. e.g. https://my-confluence-server.com or https://my-cloud-subscription.atlassian.net/wiki 
 
-4. Ready
+4. Add "com.alfredapp.dimitrikoenig.confluencesuggest" to the comment field
+
+5. Ready
 
 ## Usage
 
