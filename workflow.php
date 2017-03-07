@@ -6,25 +6,24 @@ error_reporting(E_ALL);
 date_default_timezone_set('UTC');
 
 require_once('workflows-library.php');
-require_once('helper-functions.php');
+
+function removeHighlight($input)
+{
+    return preg_replace('/@@@[^@]+@@@(.*)@@@[^@]+@@@/Uis', '$1', $input);
+}
 
 $wf = new Workflows();
 
-$config = (require_once 'config.php');
-
-if ($config['useLocalKeychain']) {
-    $config = array_merge($config, getCredentialsFromLocalKeychain());
-}
-
-if (empty($config['username']) || empty($config['password'])) {
-    $wf->result('confluence-auth-error', '', 'Auth config incomplete', '', 'icon.png');
+if (empty($_ENV['hostUrl']) || empty($_ENV['username']) || empty($_ENV['password'])) {
+    $wf->result('confluence-auth-error', '', 'ENV Variables not filled', '', 'icon.png');
     echo $wf->toxml();
     die('');
 }
 
-$options = array(
-    CURLOPT_USERPWD => $config['username'] . ':' . $config['password']
-);
+$options = [
+    CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+    CURLOPT_USERPWD => $_ENV['username'] . ':' . $_ENV['password']
+];
 
 if (!isset($mode)) {
     $mode = 'search';
@@ -32,7 +31,7 @@ if (!isset($mode)) {
 
 try {
     if ($mode === 'search') {
-        $response = $wf->request($config['hostUrl'] . '/rest/searchv3/latest/search?queryString=' . rawurlencode(utf8_encode($input)), $options);
+        $response = $wf->request($_ENV['hostUrl'] . '/rest/searchv3/latest/search?queryString=' . rawurlencode(utf8_encode($input)), $options);
         $jsonResponse = json_decode($response);
 
         if (!is_object($jsonResponse)) {
@@ -51,12 +50,12 @@ try {
 
         if ($jsonResponse->total > 0) {
             foreach ($jsonResponse->results as $result) {
-                $wf->result('confluence-' . $result->id, $config['hostUrl'] . $result->url, removeHighlight($result->title), sprintf('%s | %s | %s', isset($result->searchResultContainer) ? $result->searchResultContainer->name : 'N/A', $result->friendlyDate, removeHighlight($result->bodyTextHighlights)), '');
+                $wf->result('confluence-' . $result->id, $_ENV['hostUrl'] . $result->url, removeHighlight($result->title), sprintf('%s | %s | %s', isset($result->searchResultContainer) ? $result->searchResultContainer->name : 'N/A', $result->friendlyDate, removeHighlight($result->bodyTextHighlights)), '');
             }
         }
     }
     if ($mode === 'recently-viewed') {
-        $response = $wf->request($config['hostUrl'] . '/rest/recentlyviewed/latest/recent', $options);
+        $response = $wf->request($_ENV['hostUrl'] . '/rest/recentlyviewed/latest/recent', $options);
         $jsonResponse = json_decode($response);
 
         if (isset($jsonResponse->errorMessages)) {
@@ -67,7 +66,7 @@ try {
 
         if (is_array($jsonResponse)) {
             foreach ($jsonResponse as $result) {
-                $wf->result(sprintf('confluence-%s-%s', $result->id, $result->lastSeen), $config['hostUrl'] . $result->url, $result->title, sprintf('%s - Space: %s', date('H:i d.m.', intval($result->lastSeen/1000)), $result->space), '');
+                $wf->result(sprintf('confluence-%s-%s', $result->id, $result->lastSeen), $_ENV['hostUrl'] . $result->url, $result->title, sprintf('%s - Space: %s', date('H:i d.m.', intval($result->lastSeen/1000)), $result->space), '');
             }
         }
     }

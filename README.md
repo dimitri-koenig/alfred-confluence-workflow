@@ -4,15 +4,11 @@ Uses Confluence's REST Api for searching and fastjumping to recently viewed page
 
 ## Installation
 
-1. Clone this repo into your Alfred workflows directory `~/Library/Application Support/Alfred 2/Alfred.alfredpreferences/workflows/` OR [download the master branch as zip file](https://github.com/dimitri-koenig/alfred-confluence-workflow/archive/master.zip) and double click on the `confluence.search.suggest` workflow package file
+1. [Download the master branch as zip file](https://github.com/dimitri-koenig/alfred-confluence-workflow/archive/master.zip) and double click on the `confluence.search.suggest` workflow package file
 
-2. Go into your mac keychain program, and either search for your confluence safari login data, or create such an item ([Click here for a short tutorial on that](https://www.dimitrikoenig.net/better-usage-of-sensible-user-data-for-alfred-workflows.html))
+2. Configure your ENV Variables
 
-3. Make sure the "Where" fields points to the confluence installation. e.g. https://my-confluence-server.com or https://my-cloud-subscription.atlassian.net/wiki 
-
-4. Add "com.alfredapp.dimitrikoenig.confluencesuggest" to the comment field
-
-5. Ready
+3. Ready
 
 ## Usage
 
