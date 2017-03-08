@@ -1,4 +1,4 @@
-# Confluence Search Suggest Workflow for Alfred 2
+# Confluence Search Suggest Workflow for Alfred 3
 
 Uses Confluence's REST Api for searching and fastjumping to recently viewed pages
 
